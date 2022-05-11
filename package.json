@@ -1,0 +1,28 @@
+{
+  "name": "gh-jira-sync-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist -m",
+    "watch": "ncc build index.js -o dist -m -w",
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eve-World-Platform/gh-jira-sync-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eve-World-Platform/gh-jira-sync-action/issues"
+  },
+  "homepage": "https://github.com/Eve-World-Platform/gh-jira-sync-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.7.0",
+    "@actions/github": "^5.0.1",
+    "@vercel/ncc": "^0.33.4",
+    "node-fetch": "2.6.0"
+  }
+}
