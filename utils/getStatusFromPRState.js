@@ -2,7 +2,13 @@ const CONSTANTS = require('./constants');
 const { createLogger } = require('./createLogger');
 const core = require('@actions/core');
 
-function getStatusFromPRState(action, review, isPRMergedYet, matching_labels) {
+function getStatusFromPRState(
+  action,
+  review,
+  isPRMergedYet,
+  matching_labels,
+  ticketType
+) {
   const getStatusFromPRStateLogger = createLogger('getStatusFromPRState');
   let status = '';
   switch (action) {
@@ -23,6 +29,11 @@ function getStatusFromPRState(action, review, isPRMergedYet, matching_labels) {
         review.state === 'changes_requested'
       ) {
         status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
+      } else if (
+        isPRMergedYet &&
+        ticketType === CONSTANTS.JIRA_TICKET_TYPE.STORY
+      ) {
+        status = CONSTANTS.JIRA_CODE_MERGED_TO_DEVELOP;
       }
       break;
     default:

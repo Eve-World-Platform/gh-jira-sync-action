@@ -80,7 +80,8 @@ async function run() {
       action,
       review,
       isPRMergedYet,
-      matching_labels
+      matching_labels,
+      ticketType
     );
 
     // if the action is not triggered due to the change in PR status
