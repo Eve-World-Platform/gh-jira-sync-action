@@ -28,18 +28,20 @@ function forBugTicketType(action, review, isPRMergedYet, matching_labels) {
   switch (action) {
     case 'opened':
     case 'reopened':
-    case 'submitted':
     case 'closed':
       // check if PR has no approved labels or,
-      // if the reviewer requests changes or,
       // if the PR is closed and not merged,
       // then set the new status to In Progress
       if (
-        !(
-          matching_labels.includes(CONSTANTS.GH_DEV_APPROVED) || isPRMergedYet
-        ) ||
-        review.state === 'changes_requested'
+        !(matching_labels.includes(CONSTANTS.GH_DEV_APPROVED) || isPRMergedYet)
       ) {
+        status = CONSTANTS.JIRA_IN_PROGRESS;
+      }
+      break;
+    case 'submitted':
+      // if the reviewer requests changes,
+      // then set the new status to In Progress
+      if (review.state === 'changes_requested') {
         status = CONSTANTS.JIRA_IN_PROGRESS;
       }
       break;
@@ -55,10 +57,8 @@ function forStoryTicketType(action, review, isPRMergedYet, matching_labels) {
   switch (action) {
     case 'opened':
     case 'reopened':
-    case 'submitted':
     case 'closed':
       // check if PR has no approved labels or,
-      // if the reviewer requests changes or,
       // if the PR is closed and not merged,
       // then set the new status to In Progress
       if (
@@ -66,12 +66,18 @@ function forStoryTicketType(action, review, isPRMergedYet, matching_labels) {
           matching_labels.includes(CONSTANTS.GH_DEV_APPROVED) ||
           matching_labels.includes(CONSTANTS.GH_QC_APPROVED) ||
           isPRMergedYet
-        ) ||
-        review.state === 'changes_requested'
+        )
       ) {
         status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
       } else if (isPRMergedYet) {
         status = CONSTANTS.JIRA_CODE_MERGED_TO_DEVELOP;
+      }
+      break;
+    case 'submitted':
+      // if the reviewer requests changes,
+      // then set the new status to In Progress
+      if (review.state === 'changes_requested') {
+        status = CONSTANTS.JIRA_IN_PROGRESS;
       }
       break;
     default:

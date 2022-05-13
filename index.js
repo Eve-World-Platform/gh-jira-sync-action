@@ -90,13 +90,14 @@ async function run() {
       new_jira_status = await getStatusFromPRLabels(
         async () =>
           await octokit.rest.pulls.listReviews({
-            owner: 'srikar-samudrala',
-            repo: 'gh-jira-sync',
-            pull_number: 35,
+            owner: pull_request.base.repo.owner.login,
+            repo: pull_request.base.repo.name,
+            pull_number: pull_request.number,
           }),
         matching_labels,
         ticketType
       );
+      core.info(JSON.stringify(pull_request, null, 2));
     }
 
     if (new_jira_status === '') {
