@@ -17,7 +17,7 @@ async function checkIsPRApproved(label, fetchReviews) {
   core.info(JSON.stringify(reviews, null, 2));
   const isApproved =
     reviews.data.filter((review) => {
-      review.state === 'APPROVED';
+      return review.state === 'APPROVED';
     }).length >= 2;
 
   if (!isApproved) {
