@@ -44,7 +44,10 @@ async function getStatusFromPRLabels(
   if (matching_labels.includes(CONSTANTS.GH_READY_FOR_REVIEW)) {
     status = CONSTANTS.JIRA_CODE_REVIEW;
   } else if (matching_labels.includes(CONSTANTS.GH_WORK_IN_PROGRESS)) {
-    status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
+    status =
+      ticketType === CONSTANTS.JIRA_TICKET_TYPE.BUG
+        ? CONSTANTS.JIRA_IN_PROGRESS
+        : CONSTANTS.JIRA_DEV_IN_PROGRESS;
   } else if (matching_labels.includes(CONSTANTS.GH_DEV_APPROVED)) {
     const isApproved = await checkIsPRApproved(
       CONSTANTS.GH_DEV_APPROVED,
@@ -54,13 +57,16 @@ async function getStatusFromPRLabels(
     if (!isApproved) {
       return status;
     }
-    status =
-      ticketType === CONSTANTS.JIRA_TICKET_TYPE.BUG
-        ? CONSTANTS.JIRA_UAT
-        : CONSTANTS.JIRA_READY_FOR_TESTING;
-  } else if (matching_labels.includes(CONSTANTS.GH_READY_FOR_QC)) {
-    status = CONSTANTS.JIRA_IN_TESTING;
-  } else if (matching_labels.includes(CONSTANTS.GH_QC_APPROVED)) {
+    status = CONSTANTS.JIRA_READY_FOR_TESTING;
+  } else if (
+    matching_labels.includes(CONSTANTS.GH_READY_FOR_QC) &&
+    ticketType !== CONSTANTS.JIRA_TICKET_TYPE.BUG
+  ) {
+    status = CONSTANTS.JIRA_QA_VERIFICATION;
+  } else if (
+    matching_labels.includes(CONSTANTS.GH_QC_APPROVED) &&
+    ticketType !== CONSTANTS.JIRA_TICKET_TYPE.BUG
+  ) {
     status = CONSTANTS.JIRA_RESOLVED;
   }
 

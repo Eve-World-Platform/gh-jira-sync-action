@@ -128,7 +128,23 @@ function generateTransitions(jiraWorkflow) {
   const ids = jiraWorkflow.layout.transitions;
   ids.forEach((transition) => {
     const arr = getSourceAndDestination(transition.id);
-    transitions.push(arr);
+
+    // for all -> "someStatus" transitions, jira api is not
+    // sending all possible transitions for "someStatus" instead
+    // they are sending a transition with itself (for eg. <someStatus>:<someStatus>)
+    // this is an indication that every other status can be transitioned to
+    // "someStatus". So this block will add all the possible transitions that leads to
+    // "someStatus"
+    if (arr[0] === arr[1]) {
+      const statuses = jiraWorkflow.layout.statuses;
+      statuses.forEach((jiraStatus) => {
+        if (arr[0] !== jiraStatus.id) {
+          transitions.push([jiraStatus.id, arr[0]]);
+        }
+      });
+    } else {
+      transitions.push(arr);
+    }
   });
 }
 
