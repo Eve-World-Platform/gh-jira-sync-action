@@ -64,16 +64,6 @@ async function run() {
     const ticketType = ticket_obj.fields.issuetype.name;
     core.info(runLogger(ticketType));
 
-    // Stop going further if ticket is not of type task or bug
-    if (!Object.values(CONSTANTS.JIRA_TICKET_TYPE).includes(ticketType)) {
-      core.info(
-        runLogger(
-          'Currently supports only tickets of type "Story", "Task" and "Bug"'
-        )
-      );
-      return;
-    }
-
     // this provides us a new status if and only if this action
     // is triggered by PR state change (like open, close, changes requested etc..,)
     let new_jira_status = getStatusFromPRState(

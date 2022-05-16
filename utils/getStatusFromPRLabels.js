@@ -52,7 +52,17 @@ async function getStatusFromPRLabels(
     if (!isApproved) {
       return status;
     }
-    status = CONSTANTS.JIRA_READY_FOR_TESTING;
+
+    if (
+      [
+        CONSTANTS.JIRA_TICKET_TYPE.TASK,
+        CONSTANTS.JIRA_TICKET_TYPE.SUB_TASK,
+      ].includes(ticketType)
+    ) {
+      status = CONSTANTS.JIRA_APPROVAL;
+    } else {
+      status = CONSTANTS.JIRA_READY_FOR_TESTING;
+    }
   } else if (
     matching_labels.includes(CONSTANTS.GH_READY_FOR_QC) &&
     ticketType !== CONSTANTS.JIRA_TICKET_TYPE.BUG
