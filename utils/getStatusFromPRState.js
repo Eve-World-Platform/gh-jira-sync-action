@@ -35,14 +35,14 @@ function forBugTicketType(action, review, isPRMergedYet, matching_labels) {
       if (
         !(matching_labels.includes(CONSTANTS.GH_DEV_APPROVED) || isPRMergedYet)
       ) {
-        status = CONSTANTS.JIRA_IN_PROGRESS;
+        status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
       }
       break;
     case 'submitted':
       // if the reviewer requests changes,
       // then set the new status to In Progress
       if (review.state === 'changes_requested') {
-        status = CONSTANTS.JIRA_IN_PROGRESS;
+        status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
       }
       break;
     default:
@@ -77,7 +77,7 @@ function forStoryTicketType(action, review, isPRMergedYet, matching_labels) {
       // if the reviewer requests changes,
       // then set the new status to In Progress
       if (review.state === 'changes_requested') {
-        status = CONSTANTS.JIRA_IN_PROGRESS;
+        status = CONSTANTS.JIRA_DEV_IN_PROGRESS;
       }
       break;
     default:
