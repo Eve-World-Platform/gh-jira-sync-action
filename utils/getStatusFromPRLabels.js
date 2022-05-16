@@ -40,7 +40,7 @@ async function getStatusFromPRLabels(
 ) {
   const getStatusFromPRLabelsLogger = createLogger('getStatusFromPRLabels');
   let status = '';
-
+  core.info(JSON.stringify(matching_labels));
   if (matching_labels.includes(CONSTANTS.GH_READY_FOR_REVIEW)) {
     status = CONSTANTS.JIRA_CODE_REVIEW;
   } else if (matching_labels.includes(CONSTANTS.GH_WORK_IN_PROGRESS)) {
