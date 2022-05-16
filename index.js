@@ -33,6 +33,9 @@ async function run() {
     const matching_labels = CONSTANTS.GH_LABELS.filter((label) =>
       labels.includes(label)
     );
+    core.info(JSON.stringify(CONSTANTS.GH_LABELS));
+    core.info('====');
+    core.info(JSON.stringify(labels));
     const isPRMergedYet = pull_request.merged;
 
     // Fail the action if the PR title doesn't exist
