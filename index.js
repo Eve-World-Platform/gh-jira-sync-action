@@ -33,9 +33,6 @@ async function run() {
     const matching_labels = CONSTANTS.GH_LABELS.filter((label) =>
       labels.includes(label)
     );
-    core.info(JSON.stringify(CONSTANTS.GH_LABELS));
-    core.info('====');
-    core.info(JSON.stringify(labels));
     const isPRMergedYet = pull_request.merged;
 
     // Fail the action if the PR title doesn't exist
@@ -100,7 +97,6 @@ async function run() {
         matching_labels,
         ticketType
       );
-      core.info(JSON.stringify(pull_request, null, 2));
     }
 
     if (new_jira_status === '') {
