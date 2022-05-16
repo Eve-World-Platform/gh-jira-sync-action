@@ -39,6 +39,7 @@ async function getStatusFromPRLabels(
 ) {
   const getStatusFromPRLabelsLogger = createLogger('getStatusFromPRLabels');
   let status = '';
+
   if (matching_labels.includes(CONSTANTS.GH_READY_FOR_REVIEW)) {
     status = CONSTANTS.JIRA_CODE_REVIEW;
   } else if (matching_labels.includes(CONSTANTS.GH_WORK_IN_PROGRESS)) {
@@ -63,15 +64,17 @@ async function getStatusFromPRLabels(
     } else {
       status = CONSTANTS.JIRA_READY_FOR_TESTING;
     }
-  } else if (
-    matching_labels.includes(CONSTANTS.GH_READY_FOR_QC) &&
-    ticketType !== CONSTANTS.JIRA_TICKET_TYPE.BUG
-  ) {
+  }
+
+  // exit early if the ticket type is not story
+  if (ticketType !== CONSTANTS.JIRA_TICKET_TYPE.STORY) {
+    core.info(getStatusFromPRLabelsLogger(`New status => ${status}`));
+    return status;
+  }
+
+  if (matching_labels.includes(CONSTANTS.GH_READY_FOR_QC)) {
     status = CONSTANTS.JIRA_QA_VERIFICATION;
-  } else if (
-    matching_labels.includes(CONSTANTS.GH_QC_APPROVED) &&
-    ticketType !== CONSTANTS.JIRA_TICKET_TYPE.BUG
-  ) {
+  } else if (matching_labels.includes(CONSTANTS.GH_QC_APPROVED)) {
     status = CONSTANTS.JIRA_RESOLVED;
   }
 
